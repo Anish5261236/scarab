@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Architect's Tomb | AI Escape Room</title>
+    <title>The Architect's Tomb | Chamber I</title>
+    
+    <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap');
 
         body, html {
             margin: 0;
@@ -16,6 +18,9 @@
             background-color: #050505;
             color: #ffffff;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Cinematic Background */
@@ -28,87 +33,139 @@
             background-image: url('https://images.unsplash.com/photo-1539650116574-8efeb43e2750?q=80&w=2070&auto=format&fit=crop'); 
             background-size: cover;
             background-position: center;
-            opacity: 0.4;
+            opacity: 0.3;
             z-index: -1;
-            animation: slowZoom 20s infinite alternate;
         }
 
-        @keyframes slowZoom {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
-        }
-
-        /* Glassmorphism Panel */
-        .container {
-            position: relative;
+        /* Main Game Board */
+        .game-board {
             width: 90%;
-            max-width: 800px;
-            margin: 8vh auto;
-            padding: 40px;
-            background: rgba(10, 10, 10, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.1);
+            max-width: 700px;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 10px;
+            padding: 50px;
             text-align: center;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+            position: relative;
+        }
+
+        /* HUD elements */
+        .header-hud {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 3em;
-            color: #D4AF37;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #cccccc;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 15px;
             margin-bottom: 30px;
-        }
-
-        /* Start Button */
-        .start-btn {
-            background: transparent;
-            color: #D4AF37;
             font-family: 'Cinzel', serif;
-            font-size: 1.5em;
-            padding: 15px 40px;
-            border: 2px solid #D4AF37;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            color: #D4AF37;
         }
 
-        .start-btn:hover {
+        .timer {
+            font-size: 1.5em;
+            letter-spacing: 2px;
+            color: #ff3333;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            margin: 0 0 20px 0;
+            letter-spacing: 2px;
+        }
+
+        .puzzle-text {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #e0e0e0;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        /* Input area */
+        .input-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            padding: 15px 20px;
+            font-size: 1.1em;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #D4AF37;
+            border-radius: 5px;
+            color: #fff;
+            width: 60%;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .submit-btn {
             background: #D4AF37;
             color: #000;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            border: none;
+            padding: 0 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .submit-btn:hover {
+            background: #fff;
             box-shadow: 0 0 20px #D4AF37;
         }
 
-        /* Container for the iframe */
-        #bot-container {
-            display: none; 
-            width: 100%;
-            height: 500px;
-            border-radius: 10px;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            overflow: hidden;
-            background: #000;
+        /* AI Helper Button (Bottom Right) */
+        .ai-hint-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(10, 10, 10, 0.8);
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* Forces iframe to fill the container flawlessly */
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        .ai-hint-btn:hover {
+            background: #00ffcc;
+            color: #000;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.6);
+        }
+
+        .ai-hint-btn .pulse {
+            width: 10px;
+            height: 10px;
+            background-color: #00ffcc;
+            border-radius: 50%;
+            animation: pulse-animation 1.5s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
         }
     </style>
 </head>
@@ -116,27 +173,70 @@
 
     <div class="background"></div>
 
-    <div class="container">
-        <h1>The Pharaoh's Cipher</h1>
-        <p id="intro-text">The ancient AI has awakened. It generates a new labyrinth of puzzles for every trespasser. You have 60 minutes to decode the clues, or the tomb seals forever. The Guardian AI is listening...</p>
-        
-        <button class="start-btn" id="start-btn" onclick="initiateEscape()">Initialize Sequence</button>
+    <div class="game-board">
+        <div class="header-hud">
+            <div>LOCATION: ANTECHAMBER</div>
+            <div class="timer" id="countdown">60:00</div>
+        </div>
 
-        <div id="bot-container"></div>
+        <h2>The First Seal</h2>
+        <p class="puzzle-text">"I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. To pass, you must name me."</p>
+
+        <div class="input-group">
+            <input type="text" id="player-answer" placeholder="Enter cipher...">
+            <button class="submit-btn" onclick="checkAnswer()">Unlock</button>
+        </div>
+        
+        <p id="feedback" style="margin-top: 20px; color: #ff3333; display: none;">Incorrect cipher. The mechanism remains locked.</p>
     </div>
 
-    <script>
-        function initiateEscape() {
-            // Hide intro
-            document.getElementById('start-btn').style.display = 'none';
-            document.getElementById('intro-text').style.display = 'none';
-            
-            // Show container
-            const container = document.getElementById('bot-container');
-            container.style.display = 'block';
+    <button class="ai-hint-btn" onclick="openAI()">
+        <div class="pulse"></div>
+        ACCESS GUARDIAN AI
+    </button>
 
-            // Inject the iframe with your specific link, forcing the dark theme
-            container.innerHTML = `<iframe src="https://cdn.botpress.cloud/webchat/v3.6/shareable.html?configUrl=https://files.bpcontent.cloud/2026/03/31/15/20260331155126-9Z3W0Q00.json&theme=dark"></iframe>`;
+    <script>
+        // --- GAME LOGIC ---
+        function checkAnswer() {
+            const answer = document.getElementById('player-answer').value.toLowerCase().trim();
+            const feedback = document.getElementById('feedback');
+            
+            if (answer === "echo") {
+                feedback.style.color = "#00ff00";
+                feedback.innerText = "Seal broken. Accessing next chamber...";
+                feedback.style.display = "block";
+                // Here is where you would link to the next HTML page
+            } else {
+                feedback.style.color = "#ff3333";
+                feedback.innerText = "Incorrect cipher. The mechanism remains locked.";
+                feedback.style.display = "block";
+            }
+        }
+
+        // Timer Logic
+        let timeLeft = 3600; // 60 minutes in seconds
+        setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById('countdown').innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            if(timeLeft > 0) timeLeft--;
+        }, 1000);
+
+
+        // --- BOTPRESS AI INTEGRATION ---
+        // 1. Initialize the bot invisibly in the background
+        window.botpressWebChat.init({
+            "configUrl": "https://files.bpcontent.cloud/2026/03/31/15/20260331155126-9Z3W0Q00.json",
+            "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
+            "hideWidget": true, // We hide their default button to use our cinematic custom button
+            "themeName": "prism",
+            "theme": "dark"
+        });
+
+        // 2. Function to pop open the chat when the custom button is clicked
+        function openAI() {
+            window.botpressWebChat.sendEvent({ type: 'show' });
         }
     </script>
 </body>
