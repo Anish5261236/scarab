@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Architect's Tomb | Chamber I</title>
     
-    <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2026/03/31/15/20260331155126-C69DAEGZ.js" defer></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;700&display=swap');
@@ -40,14 +41,14 @@
         /* Main Game Board */
         .game-board {
             width: 90%;
-            max-width: 700px;
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(12px);
+            max-width: 750px;
+            background: rgba(10, 10, 10, 0.75);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 50px;
             text-align: center;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(212, 175, 55, 0.05);
             position: relative;
         }
 
@@ -60,73 +61,102 @@
             margin-bottom: 30px;
             font-family: 'Cinzel', serif;
             color: #D4AF37;
+            letter-spacing: 2px;
         }
 
         .timer {
             font-size: 1.5em;
-            letter-spacing: 2px;
             color: #ff3333;
             text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
         }
 
         h2 {
             font-family: 'Cinzel', serif;
-            font-size: 2em;
-            margin: 0 0 20px 0;
-            letter-spacing: 2px;
+            font-size: 2.5em;
+            margin: 0 0 15px 0;
+            letter-spacing: 3px;
+            color: #e8c35a;
         }
 
         .puzzle-text {
-            font-size: 1.2em;
+            font-size: 1.1em;
             line-height: 1.8;
-            color: #e0e0e0;
+            color: #cccccc;
             margin-bottom: 40px;
             font-style: italic;
+            padding: 0 20px;
         }
 
-        /* Input area */
-        .input-group {
+        /* --- NEW INTERACTIVE LOCK MECHANICS --- */
+        .lock-mechanism {
             display: flex;
             justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dial-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 10px;
         }
 
-        input[type="text"] {
-            padding: 15px 20px;
-            font-size: 1.1em;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #D4AF37;
-            border-radius: 5px;
-            color: #fff;
-            width: 60%;
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
+        .dial {
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 2px solid #D4AF37;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(212, 175, 55, 0.2);
+            transition: transform 0.1s, box-shadow 0.3s;
         }
 
-        input[type="text"]:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        .dial:active {
+            transform: scale(0.95) translateY(5px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.8), inset 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .dial:hover {
+            border-color: #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .dial-label {
+            font-family: 'Cinzel', serif;
+            color: #888;
+            font-size: 0.8em;
+            letter-spacing: 1px;
         }
 
         .submit-btn {
-            background: #D4AF37;
-            color: #000;
-            font-weight: bold;
+            background: transparent;
+            color: #D4AF37;
+            border: 2px solid #D4AF37;
             font-family: 'Cinzel', serif;
-            border: none;
-            padding: 0 30px;
+            font-size: 1.2em;
+            padding: 15px 40px;
             border-radius: 5px;
             cursor: pointer;
             transition: 0.3s;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
         }
 
         .submit-btn:hover {
-            background: #fff;
+            background: #D4AF37;
+            color: #000;
             box-shadow: 0 0 20px #D4AF37;
         }
 
-        /* AI Helper Button (Bottom Right) */
+        /* AI Helper Button */
         .ai-hint-btn {
             position: fixed;
             bottom: 30px;
@@ -179,15 +209,27 @@
             <div class="timer" id="countdown">60:00</div>
         </div>
 
-        <h2>The First Seal</h2>
-        <p class="puzzle-text">"I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. To pass, you must name me."</p>
+        <h2>The Scarab's Sequence</h2>
+        <p class="puzzle-text">"To walk the path of the sun, align the elements of life. First the vessel, then the breath, and finally, the eternal guardian."</p>
 
-        <div class="input-group">
-            <input type="text" id="player-answer" placeholder="Enter cipher...">
-            <button class="submit-btn" onclick="checkAnswer()">Unlock</button>
+        <div class="lock-mechanism">
+            <div class="dial-container">
+                <div class="dial" id="dial-0" onclick="rotateDial(0)">𓀀</div>
+                <div class="dial-label">RING I</div>
+            </div>
+            <div class="dial-container">
+                <div class="dial" id="dial-1" onclick="rotateDial(1)">𓀀</div>
+                <div class="dial-label">RING II</div>
+            </div>
+            <div class="dial-container">
+                <div class="dial" id="dial-2" onclick="rotateDial(2)">𓀀</div>
+                <div class="dial-label">RING III</div>
+            </div>
         </div>
+
+        <button class="submit-btn" onclick="checkLock()">Engage Mechanism</button>
         
-        <p id="feedback" style="margin-top: 20px; color: #ff3333; display: none;">Incorrect cipher. The mechanism remains locked.</p>
+        <p id="feedback" style="margin-top: 20px; font-family: 'Cinzel', serif; font-size: 1.2em; display: none;"></p>
     </div>
 
     <button class="ai-hint-btn" onclick="openAI()">
@@ -196,25 +238,59 @@
     </button>
 
     <script>
-        // --- GAME LOGIC ---
-        function checkAnswer() {
-            const answer = document.getElementById('player-answer').value.toLowerCase().trim();
+        // --- INTERACTIVE LOCK LOGIC ---
+        // Array of ancient symbols to cycle through
+        const symbols = ['𓀀', '𓃒', '𓆣', '𓉡', '𓋹', '𓎛'];
+        
+        // The current state of the 3 dials (indexes of the symbols array)
+        let dialStates = [0, 0, 0];
+        
+        // The winning combination (Vessel 𓉡, Breath 𓋹, Guardian/Scarab 𓆣)
+        const winningCombination = [3, 4, 2]; 
+
+        function rotateDial(dialIndex) {
+            // Move to the next symbol, loop back to 0 if at the end
+            dialStates[dialIndex] = (dialStates[dialIndex] + 1) % symbols.length;
+            
+            // Update the HTML element to show the new symbol
+            document.getElementById(`dial-${dialIndex}`).innerText = symbols[dialStates[dialIndex]];
+            
+            // Play a subtle click sound (optional, but adds to the professional feel)
+            // new Audio('click.mp3').play(); 
+        }
+
+        function checkLock() {
             const feedback = document.getElementById('feedback');
             
-            if (answer === "echo") {
+            // Check if the current dial states match the winning combination
+            if (dialStates[0] === winningCombination[0] && 
+                dialStates[1] === winningCombination[1] && 
+                dialStates[2] === winningCombination[2]) {
+                
                 feedback.style.color = "#00ff00";
-                feedback.innerText = "Seal broken. Accessing next chamber...";
+                feedback.style.textShadow = "0 0 10px rgba(0, 255, 0, 0.5)";
+                feedback.innerText = "Mechanism engaged. The heavy stone doors grind open...";
                 feedback.style.display = "block";
-                // Here is where you would link to the next HTML page
+                
+                // Add a delay before moving to the next page
+                // setTimeout(() => { window.location.href = 'chamber2.html'; }, 3000);
             } else {
                 feedback.style.color = "#ff3333";
-                feedback.innerText = "Incorrect cipher. The mechanism remains locked.";
+                feedback.style.textShadow = "0 0 10px rgba(255, 51, 51, 0.5)";
+                feedback.innerText = "The gears grind, but the lock holds fast. The sequence is incorrect.";
                 feedback.style.display = "block";
+                
+                // Shake animation for incorrect answer
+                const gameBoard = document.querySelector('.game-board');
+                gameBoard.style.transform = 'translateX(10px)';
+                setTimeout(() => gameBoard.style.transform = 'translateX(-10px)', 50);
+                setTimeout(() => gameBoard.style.transform = 'translateX(10px)', 100);
+                setTimeout(() => gameBoard.style.transform = 'translateX(0)', 150);
             }
         }
 
-        // Timer Logic
-        let timeLeft = 3600; // 60 minutes in seconds
+        // --- TIMER LOGIC ---
+        let timeLeft = 3600; 
         setInterval(() => {
             let minutes = Math.floor(timeLeft / 60);
             let seconds = timeLeft % 60;
@@ -223,18 +299,15 @@
             if(timeLeft > 0) timeLeft--;
         }, 1000);
 
-
         // --- BOTPRESS AI INTEGRATION ---
-        // 1. Initialize the bot invisibly in the background
         window.botpressWebChat.init({
             "configUrl": "https://files.bpcontent.cloud/2026/03/31/15/20260331155126-9Z3W0Q00.json",
             "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
-            "hideWidget": true, // We hide their default button to use our cinematic custom button
+            "hideWidget": true,
             "themeName": "prism",
             "theme": "dark"
         });
 
-        // 2. Function to pop open the chat when the custom button is clicked
         function openAI() {
             window.botpressWebChat.sendEvent({ type: 'show' });
         }
