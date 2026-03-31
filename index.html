@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Architect's Tomb | AI Escape Room</title>
+    
+    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Cinematic Background */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1539650116574-8efeb43e2750?q=80&w=2070&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            z-index: -1;
+            animation: slowZoom 20s infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        /* Glassmorphism Panel */
+        .container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            margin: 8vh auto;
+            padding: 40px;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3em;
+            color: #D4AF37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #cccccc;
+            margin-bottom: 30px;
+        }
+
+        /* Start Button */
+        .start-btn {
+            background: transparent;
+            color: #D4AF37;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5em;
+            padding: 15px 40px;
+            border: 2px solid #D4AF37;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .start-btn:hover {
+            background: #D4AF37;
+            color: #000;
+            box-shadow: 0 0 20px #D4AF37;
+        }
+
+        /* Container designed to hold the embedded bot */
+        #bot-container {
+            display: none; /* Hidden until sequence initializes */
+            width: 100%;
+            height: 500px;
+            border-radius: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background"></div>
+
+    <div class="container">
+        <h1>The Pharaoh's Cipher</h1>
+        <p id="intro-text">The ancient AI has awakened. It generates a new labyrinth of puzzles for every trespasser. You have 60 minutes to decode the clues, or the tomb seals forever. The Guardian AI is listening...</p>
+        
+        <button class="start-btn" onclick="initiateEscape()">Initialize Sequence</button>
+
+        <div id="bot-container"></div>
+    </div>
+
+    <script>
+        function initiateEscape() {
+            // 1. Hide the introductory elements
+            document.querySelector('.start-btn').style.display = 'none';
+            document.getElementById('intro-text').style.display = 'none';
+            
+            // 2. Reveal the container where the bot will live
+            document.getElementById('bot-container').style.display = 'block';
+
+            // 3. Initialize your specific Botpress Bot
+            window.botpressWebChat.init({
+                "configUrl": "https://files.bpcontent.cloud/2026/03/31/15/20260331155126-9Z3W0Q00.json",
+                "hostUrl": "https://cdn.botpress.cloud/webchat/v3.6",
+                "containerElementId": "bot-container", // Forces bot into our cinematic box
+                "hideWidget": true, // Hides the default floating chat bubble
+                "themeName": "prism",
+                "theme": "dark", // Forces dark mode to match the aesthetic
+                "enableConversationDeletion": true
+            });
+
+            // 4. Force the chat window to open immediately inside the container
+            window.botpressWebChat.onEvent(function (event) {
+                if (event.type === 'LIFECYCLE.LOADED') {
+                    window.botpressWebChat.sendEvent({ type: 'show' });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
