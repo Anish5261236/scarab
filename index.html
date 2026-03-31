@@ -3,36 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project: ENIGMA | AI Escape</title>
+    <title>Tomb of the Sun King | AI Escape</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Courier+Prime&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div id="game-container">
         <header>
-            <h1>PROJECT: ENIGMA</h1>
-            <p id="level-indicator">Level: 1 // Initialization</p>
+            <h1>TOMB OF THE SUN KING</h1>
+            <div id="stats-panel">
+                <p id="level-indicator">Chamber: I</p>
+                <p id="score-display">Score: 0</p>
+            </div>
+            <div id="rewards-panel">
+                <strong>Relics Discovered: </strong>
+                <span id="relics-list">None</span>
+            </div>
         </header>
 
         <main>
             <div id="puzzle-screen" class="cinematic-box">
-                <h2 id="puzzle-title">System Locked</h2>
-                <p id="puzzle-text">Initiating neural link... Awaiting your command.</p>
+                <h2 id="puzzle-title">The Sealed Gate</h2>
+                <div id="puzzle-content"></div>
                 
                 <div class="input-section">
-                    <input type="text" id="player-input" placeholder="Enter override code..." autocomplete="off">
-                    <button id="submit-btn">EXECUTE</button>
+                    <input type="text" id="player-input" placeholder="Enter ancient code..." autocomplete="off">
+                    <button id="submit-btn">UNLOCK</button>
                 </div>
             </div>
 
-            <aside id="ai-terminal" class="cinematic-box">
+            <aside id="expedition-log" class="cinematic-box">
                 <div id="chat-history">
-                    <p class="system-msg"><strong>[SYSTEM]:</strong> Boot sequence complete.</p>
-                    <p class="system-msg"><strong>[SYSTEM]:</strong> External AI Agent detected. Comm-link open.</p>
-                    <p class="ai-msg"><strong>[DIRECTIVE]:</strong> Use the AI comms interface (bottom right) to request hints or analyze clues.</p>
+                    <p class="system-msg"><strong>[EXPEDITION LOG]:</strong> Entering the main antechamber.</p>
+                    <p class="system-msg"><strong>[EXPEDITION LOG]:</strong> Air quality dropping. Sealing mechanism triggered.</p>
+                    <p class="ai-msg"><strong>[A.U.R.A.]:</strong> Explorer, I am online. Use the comms link (bottom right) if you require analysis of these artifacts.</p>
                 </div>
-                </aside>
+            </aside>
         </main>
     </div>
 
