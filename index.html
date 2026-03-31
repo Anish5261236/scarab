@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Architect's Tomb | AI Escape Room</title>
     
-    <script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+    <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400&display=swap');
@@ -104,7 +104,7 @@
             border: 1px solid rgba(212, 175, 55, 0.5);
             overflow: hidden;
             position: relative;
-            background: #000;
+            background: transparent;
         }
     </style>
 </head>
@@ -113,41 +113,3 @@
     <div class="background"></div>
 
     <div class="container">
-        <h1>The Pharaoh's Cipher</h1>
-        <p id="intro-text">The ancient AI has awakened. It generates a new labyrinth of puzzles for every trespasser. You have 60 minutes to decode the clues, or the tomb seals forever. The Guardian AI is listening...</p>
-        
-        <button class="start-btn" onclick="initiateEscape()">Initialize Sequence</button>
-
-        <div id="bot-container"></div>
-    </div>
-
-    <script>
-        function initiateEscape() {
-            // 1. Hide the introductory elements
-            document.querySelector('.start-btn').style.display = 'none';
-            document.getElementById('intro-text').style.display = 'none';
-            
-            // 2. Reveal the container where the bot will live
-            document.getElementById('bot-container').style.display = 'block';
-
-            // 3. Initialize your specific Botpress Bot
-            window.botpressWebChat.init({
-                "configUrl": "https://files.bpcontent.cloud/2026/03/31/15/20260331155126-9Z3W0Q00.json",
-                "hostUrl": "https://cdn.botpress.cloud/webchat/v3.6",
-                "containerElementId": "bot-container", // Forces bot into our cinematic box
-                "hideWidget": true, // Hides the default floating chat bubble
-                "themeName": "prism",
-                "theme": "dark", // Forces dark mode to match the aesthetic
-                "enableConversationDeletion": true
-            });
-
-            // 4. Force the chat window to open immediately inside the container
-            window.botpressWebChat.onEvent(function (event) {
-                if (event.type === 'LIFECYCLE.LOADED') {
-                    window.botpressWebChat.sendEvent({ type: 'show' });
-                }
-            });
-        }
-    </script>
-</body>
-</html>
